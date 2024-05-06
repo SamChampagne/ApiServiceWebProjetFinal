@@ -5,14 +5,15 @@ const pool = require("../config/db_pg");
 dotenv.config();
 
 class SousTache{
-    static async ajouterSousTache(titre, complete, tacheId) {
+    static async ajouterSousTaches(titre, complete, tacheId) {
         try {
+            tache = parseInt(tacheId);
             const query = `
                 INSERT INTO sous_taches (titre, complete, tache_id)
                 VALUES ($1, $2, $3)
                 RETURNING *;
             `;
-            const values = [titre, complete, tacheId];
+            const values = [titre, complete, tache];
 
             const result = await pool.query(query, values);
 
@@ -35,7 +36,7 @@ class SousTache{
             const values = [id];
 
             const result = await pool.query(query, values);
-            
+
             // Vérifier si la sous-tâche a été supprimée
             if (result.rows.length === 0) {
                 throw new Error(`La sous-tâche avec l'ID ${id} n'existe pas`);
