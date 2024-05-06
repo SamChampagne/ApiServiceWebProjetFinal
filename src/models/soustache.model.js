@@ -28,14 +28,14 @@ class SousTache{
     static async supprimerSousTaches(id) {
         try {
             const query = `
-                DELETE FROM Sous_taches
+                DELETE FROM sous_taches
                 WHERE id = $1
                 RETURNING *;
             `;
             const values = [id];
 
             const result = await pool.query(query, values);
-
+            
             // Vérifier si la sous-tâche a été supprimée
             if (result.rows.length === 0) {
                 throw new Error(`La sous-tâche avec l'ID ${id} n'existe pas`);
