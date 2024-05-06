@@ -43,11 +43,13 @@ const supprimerSousTache = async (req, res, next) => {
     try {
         const soustacheId = req.params.id;
         
-        const tacheSupprimer = SousTache.supprimerSousTaches(soustacheId);
-        res.status(200).json({ message: "Sous tâches supprimer avec succès, ID: " + soustacheId });
+        // Attends la résolution de la promesse
+        const tacheSupprimer = await SousTache.supprimerSousTaches(soustacheId);
+        
+        res.status(200).json({ message: "Sous-tâche supprimée avec succès, ID: " + soustacheId });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ erreur: `Echec lors de l'ajout d'un usager ${req.params.email}` });
+        res.status(500).json({ erreur: "Une erreur est survenue lors de la suppression de la sous-tâche." });
     }
 };
 const ajouterSousTache = async (req, res, next) => {
