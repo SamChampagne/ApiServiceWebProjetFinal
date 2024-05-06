@@ -38,9 +38,7 @@ const afficher = async (req, res, next) => {
     try {
 
         const id = req.params.id;
-        let taches;
-
-        taches = await Tache.getTaskById(id)
+        let taches = await Tache.avoirTacheParId(id)
         res.status(200).json({ taches });
     } catch (error) {
         console.error(error);

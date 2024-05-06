@@ -27,11 +27,16 @@ const modifierSousTache = async (req, res, next) => {
     try {
         const sousTacheId = req.params.id;
         const nouvelleDonnes = req.body;
-        const soustachModifier = SousTache.modifierSousTache(sousTacheId,nouvelleDonnes)
-        res.status(200).json({ message: "Sous tâches modifier avec succès " });
+        const sousTacheModifiee = await SousTache.modifierSousTache(sousTacheId, nouvelleDonnes);
+
+        if (sousTacheModifiee === null) {
+            return res.status(404).json({ erreur: `La tâche avec l'ID ${nouvelleDonnes.tache_id} n'existe pas dans la base de données.` });
+        }
+        
+        res.status(200).json({ message: "Sous-tâche modifiée avec succès." });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ erreur: `Echec lors de l'ajout d'un usager ${req.params.email}` });
+        res.status(500).json({ erreur: "Une erreur est survenue lors de la modification de la sous-tâche." });
     }
 };
 const supprimerSousTache = async (req, res, next) => {
@@ -51,7 +56,7 @@ const ajouterSousTache = async (req, res, next) => {
         const complete = req.body.complete;
         const tacheId = req.body.tacheId;
         const soustache = SousTache.ajouterSousTache(titre,complete,tacheId);
-        res.status(200).json({ message: "Sous tâche ajouter avec succès" + tacheId });
+        res.status(200).json({ message: "Sous tâche ajouter avec succès" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ erreur: `Echec lors de l'ajout d'un usager ${req.params.email}` });

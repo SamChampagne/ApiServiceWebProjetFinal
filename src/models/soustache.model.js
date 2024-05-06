@@ -49,6 +49,21 @@ class SousTache{
     }
     static async modifierSousTache(id, nouvellesDonnees) {
         const { titre, tache_id } = nouvellesDonnees;
+    
+        // Vérifier si tache_id existe dans la base de données
+        const tacheExistsQuery = `
+            SELECT id
+            FROM Taches
+            WHERE id = $1;
+        `;
+        const tacheExistsValues = [tache_id];
+        const { rows: tacheExistsRows } = await pool.query(tacheExistsQuery, tacheExistsValues);
+    
+        if (tacheExistsRows.length === 0) {
+            return null; // Retourner null si la tâche n'existe pas
+        }
+    
+        // Si tache_id existe, effectuer la mise à jour de la sous-tâche
         const queryText = `
             UPDATE Sous_taches
             SET titre = $1, tache_id = $2
