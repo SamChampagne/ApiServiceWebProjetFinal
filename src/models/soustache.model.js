@@ -7,14 +7,14 @@ dotenv.config();
 class SousTache{
     static async ajouterSousTaches(titre, complete, tacheId) {
         try {
-            tache = parseInt(tacheId);
+            
             const query = `
                 INSERT INTO sous_taches (titre, complete, tache_id)
                 VALUES ($1, $2, $3)
                 RETURNING *;
             `;
-            const values = [titre, complete, tache];
-
+            const values = [titre, complete, tacheId];
+            
             const result = await pool.query(query, values);
 
             // Récupérer les données de la sous-tâche ajoutée à partir du résultat de la requête

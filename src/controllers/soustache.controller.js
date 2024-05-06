@@ -54,14 +54,20 @@ const supprimerSousTache = async (req, res, next) => {
 };
 const ajouterSousTache = async (req, res, next) => {
     try {
-        const titre = req.body.titre;
-        const complete = req.body.complete;
-        const tacheId = req.body.tacheId;
+        const { titre, complete, tache_id } = req.body;
+
+        // Vérifie que tache_id est un nombre entier
+        const tacheId = parseInt(tache_id);
+
+        // Vérifie que tacheId est un nombre valide
+        if (isNaN(tacheId)) {
+            throw new Error("L'ID de la tâche n'est pas valide.");
+        }
 
         // Attends la résolution de la promesse
-        const sousTacheAjoutee = await SousTache.ajouterSousTaches(titre, complete, tacheId);
+        const nouvelleSousTache = await SousTache.ajouterSousTaches(titre, complete, tacheId);
 
-        res.status(200).json({ message: "Sous-tâche ajoutée avec succès", nouvelleSousTache: sousTacheAjoutee });
+        res.status(200).json({ message: "Sous-tâche ajoutée avec succès", nouvelleSousTache });
     } catch (error) {
         console.error(error);
         res.status(500).json({ erreur: "Une erreur est survenue lors de l'ajout de la sous-tâche." });
