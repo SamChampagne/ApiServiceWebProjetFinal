@@ -13,7 +13,7 @@ class SousTache{
                 VALUES ($1, $2, $3)
                 RETURNING *;
             `;
-            const values = [titre, complete, tache];
+            const values = [titre, complete, tacheId];
 
             const result = await pool.query(query, values);
 
