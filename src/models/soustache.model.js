@@ -25,7 +25,7 @@ class SousTache{
             throw new Error(`Erreur lors de l'ajout de la sous-tâche : ${error.message}`);
         }
     }
-    static async supprimerSousTache(id) {
+    static async supprimerSousTaches(id) {
         try {
             const query = `
                 DELETE FROM Sous_taches

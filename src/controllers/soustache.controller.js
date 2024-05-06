@@ -42,8 +42,8 @@ const modifierSousTache = async (req, res, next) => {
 const supprimerSousTache = async (req, res, next) => {
     try {
         const soustacheId = req.params.id;
-
-        const tacheSupprimer = SousTache.supprimerSousTache(soustacheId);
+        
+        const tacheSupprimer = SousTache.supprimerSousTaches(soustacheId);
         res.status(200).json({ message: "Sous tâches supprimer avec succès, ID: " + soustacheId });
     } catch (error) {
         console.error(error);
