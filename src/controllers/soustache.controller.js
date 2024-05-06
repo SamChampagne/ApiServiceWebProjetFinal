@@ -57,11 +57,14 @@ const ajouterSousTache = async (req, res, next) => {
         const titre = req.body.titre;
         const complete = req.body.complete;
         const tacheId = req.body.tacheId;
-        const soustache = SousTache.ajouterSousTache(titre,complete,tacheId);
-        res.status(200).json({ message: "Sous tâche ajouter avec succès" });
+
+        // Attends la résolution de la promesse
+        const sousTacheAjoutee = await SousTache.ajouterSousTaches(titre, complete, tacheId);
+
+        res.status(200).json({ message: "Sous-tâche ajoutée avec succès", nouvelleSousTache: sousTacheAjoutee });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ erreur: `Echec lors de l'ajout d'un usager ${req.params.email}` });
+        res.status(500).json({ erreur: "Une erreur est survenue lors de l'ajout de la sous-tâche." });
     }
 };
 
