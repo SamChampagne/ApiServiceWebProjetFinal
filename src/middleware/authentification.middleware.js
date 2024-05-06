@@ -1,14 +1,14 @@
-const usager = require("../models/tache.model.js");
+const usager = require("..//models/utilisateur.model");
 
 function authentification(req, res, next) {
-    // Vérifier si la clé API est présente dans l'entête
 
+    // Vérifier si la clé API est présente dans l'entête
     if (!req.headers.authorization) {
         return res.status(401).json({ message: "Vous devez fournir une clé api" });
     }
 
     // Récupérer la clé API
-    const cleApi = req.headers.authorization.split(' ')[1];
+    const cleApi = req.headers.authorization;
     // Vérifier si la clé API est valide
     usager.validationCle(cleApi)
         .then(resultat => {
@@ -26,6 +26,7 @@ function authentification(req, res, next) {
             return res.status(500).json({ message: "Erreur lors de la validation de la clé api" });
         });
 }
+
 
 module.exports = {
     authentification

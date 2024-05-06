@@ -1,0 +1,191 @@
+
+{
+    "openapi": "3.1.0",
+    "info" : {
+        "title": "Api Final Sam",
+        "summary": "Mon projet d'api pour l'examen final",
+        "description": "Dans cette documention vous retrouvez tout les éléments nécessaires pour la bonne utilisation de l'API",
+        "contact": {
+            "name": "Sam Champagne",
+            "email": "samolichampagne@icloud.com"
+        },
+        "version": "1.0.1 "
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:3000/",
+            "description": "Serveur de développement"
+        }
+    ],
+    "paths" : {
+        "/api/tache/afficherall" : {
+            "get": {
+                "description": "Retourne la liste de toutes les tâches. Par default, retourne seulement les tâches qui ne sont pas terminées",
+                "summary": "Liste des tâches",
+                "tags": [ "getTaches" ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Clé api, valide de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "all",
+                        "in": "query",
+                        "description": "Si oui ou non, afficher toutes les tâches",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "minimum": 0,
+                            "maximum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Toutes les tâches, complétées ou pas.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/tache"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Clé Api invalide / manquante",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur d'obtention des données",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tache/afficher/:id" : {
+            "get": {
+                "description": "Retourne la liste de toutes les tâches. Par default, retourne seulement les tâches qui ne sont pas terminées",
+                "summary": "Liste des tâches",
+                "tags": [ "getTaches" ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Clé api, valide de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "all",
+                        "in": "query",
+                        "description": "Si oui ou non, afficher toutes les tâches",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "minimum": 0,
+                            "maximum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Toutes les tâches, complétées ou pas.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/tache"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Clé Api invalide / manquante",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur d'obtention des données",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    },
+    "components":{"schemas":{"tache" : {
+        "type": "object",
+        "required": [
+            "user_id",
+            "titre",
+            "description",
+            "date_debut",
+            "date_echeance",
+            "complete"
+        ],
+        "properties": {
+            "user_id": {
+                "type": "integer",
+                "format": "int32",
+                "minimum": 0
+            },
+            "titre": {
+                "type": "string"
+            },
+            "description": {
+                "type": "string"
+            },
+            "date_debut": {
+                "type": "string"
+            },
+            "date_echeance": {
+                "type": "string"
+            },
+            "complete": {
+                "type": "integer",
+                "format": "int32",
+                "maximum": 1,
+                "minimum": 0
+            }
+        }
+    }
+    }
+}
+}

@@ -6,7 +6,6 @@ dotenv.config();
 
 class Tache {
     
-
     static async getAllTasks() {
         const client = await pool.connect();
         try {
@@ -65,17 +64,23 @@ class Tache {
         }
     }
 
-    static async ajouterTache(titre, description, date_de_debut, date_de_fin, complete) {
-        const queryText = `
-            INSERT INTO taches (titre, description, date_de_debut, date_de_fin, complete)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING *;
-        `;
-        const values = [titre, description, date_de_debut, date_de_fin, complete];
-
+    static async ajouterTache(titre, description, date_de_debut, date_de_fin, complete, cle_api) {
         try {
-            const { rows } = await pool.query(queryText, values);
-            return rows[0]; 
+            
+            const queryUtilisateur = 'SELECT id FROM usagers WHERE cle_api = $1';
+            const valuesUtilisateur = [cle_api];
+            const resultUtilisateur = await pool.query(queryUtilisateur, valuesUtilisateur);
+            const utilisateurId = resultUtilisateur.rows[0].id;
+    
+            // Insérer la tâche avec l'ID de l'utilisateur
+            const queryText = `
+                INSERT INTO taches (titre, description, date_de_debut, date_de_fin, complete, utilisateur_id)
+                VALUES ($1, $2, $3, $4, $5, $6)
+                RETURNING *;
+            `;
+            const valuesTache = [titre, description, date_de_debut, date_de_fin, complete, utilisateurId];
+            const { rows } = await pool.query(queryText, valuesTache);
+            return rows[0];
         } catch (error) {
             throw new Error(`Erreur lors de l'ajout de la tâche : ${error.message}`);
         }
@@ -139,8 +144,6 @@ class Tache {
             throw new Error(`Erreur lors de la modification de la tâche : ${error.message}`);
         }
     }
-
-    
 
 }
 
