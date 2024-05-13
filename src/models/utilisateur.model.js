@@ -22,23 +22,35 @@ class Utilisateur {
         });
     }
     static async ajouterUsager(nom, prenom, email, motdepasse) {
-        
         const cleapi = uuidv4(); // Générer une clé API unique
         try {
-            const query = `
-                INSERT INTO Usagers (nom, prenom, email, motdepasse, cle_api)
-                VALUES ( $1, $2, $3, $4, $5)
-                RETURNING *;
+            // Vérifier si l'utilisateur existe déjà
+            const checkQuery = `
+                SELECT * FROM Usagers
+                WHERE email = $1;
             `;
-            const values = [ nom, prenom, email, motdepasse, cleapi];
-            // Assurez-vous d'avoir correctement configuré votre connexion à la base de données
-            const result = await pool.query(query, values);
-            const newUser = result.rows[0];
-            
-            // Retourner le nouvel utilisateur créé
-            return newUser;
+            const checkValues = [email];
+            const existingUser = await pool.query(checkQuery, checkValues);
+    
+            if (existingUser.rows.length > 0) {
+                // L'utilisateur existe déjà, retourner un message
+                return { message: 'L\'utilisateur existe déjà.' };
+            } else {
+                // Ajouter l'utilisateur s'il n'existe pas déjà
+                const insertQuery = `
+                    INSERT INTO Usagers (nom, prenom, email, motdepasse, cle_api)
+                    VALUES ($1, $2, $3, $4, $5)
+                    RETURNING *;
+                `;
+                const insertValues = [nom, prenom, email, motdepasse, cleapi];
+                const result = await pool.query(insertQuery, insertValues);
+                const newUser = result.rows[0];
+                
+                // Retourner le nouvel utilisateur créé
+                return newUser;
+            }
         } catch (error) {
-            throw new Error(`Erreur lors de la suppression de la tâche : ${error.message}`);
+            throw new Error(`Erreur lors de l'ajout de l'usager : ${error.message}`);
         }
     }
     static async modifierCleApi(email) {
