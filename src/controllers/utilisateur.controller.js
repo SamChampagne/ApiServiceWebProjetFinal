@@ -9,13 +9,25 @@ const ajouterUsager = async (req, res, next) => {
         const email = req.body.email;
         const mot_de_passe = req.body.mot_de_passe;
         const hash = await bcrypt.hashSync(mot_de_passe,costFactor)
+        
+        // Vérifier si l'utilisateur existe déjà
+        const existingUser = await pool.query(
+            'SELECT * FROM Utilisateur WHERE email = $1',
+            [email]
+        );
+
+        if (existingUser.rows.length > 0) {
+            return res.status(409).json({ message: "L'utilisateur existe déjà." });
+        }
+
+        // Ajouter l'utilisateur s'il n'existe pas déjà
         const nouvelUtilisateur = await Utilisateur.ajouterUsager(nom, prenom, email, hash);
         const cleApi = nouvelUtilisateur.cle_api;
         
         res.status(200).json({ message: "Usager ajouté avec succès", cle_api: cleApi });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ erreur: `Echec lors de l'ajout d'un usager ${req.params.email}` });
+        res.status(500).json({ erreur: `Échec lors de l'ajout d'un usager ${req.params.email}` });
     }
 };
 const recupToken = async (req, res, next) => {
