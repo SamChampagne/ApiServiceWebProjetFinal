@@ -48,7 +48,6 @@ const afficher = async (req, res, next) => {
 const ajouterTache = async (req, res, next) => {
     try {
         
-        
         const cleApi = req.headers.authorization;
         const titre = req.body.titre;
         const description = req.body.description;

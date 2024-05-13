@@ -99,9 +99,9 @@
                         }
                     },
                     {
-                        "name": "all",
+                        "name": "id",
                         "in": "query",
-                        "description": "Si oui ou non, afficher toutes les tâches",
+                        "description": "id de la tache à retourner",
                         "required": false,
                         "schema": {
                             "type": "integer",
@@ -110,6 +110,60 @@
                             "maximum": 1
                         }
                     }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retourne la tache",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/tache"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Clé Api invalide / manquante",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur d'obtention des données",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tache/ajouter" : {
+            "get": {
+                "description": "Ajoute une tache dans la bd",
+                "summary": "Liste des tâches",
+                "tags": [ "getTaches" ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Clé api, valide de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                    
                 ],
                 "responses": {
                     "200": {
@@ -148,7 +202,6 @@
                 }
             }
         }
-        
     },
     "components":{"schemas":{"tache" : {
         "type": "object",

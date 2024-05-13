@@ -6,7 +6,7 @@ function authentification(req, res, next) {
     if (!req.headers.authorization) {
         return res.status(401).json({ message: "Vous devez fournir une clé api" });
     }
-
+    
     // Récupérer la clé API
     const cleApi = req.headers.authorization;
     // Vérifier si la clé API est valide
