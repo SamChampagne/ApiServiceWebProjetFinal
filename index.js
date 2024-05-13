@@ -17,12 +17,12 @@ const swaggerOptions = {
 // Middleware pour traiter les données au format JSON et CORS pour gérer les connexions
 app.use(cors());
 app.use(express.json());
-
+app.use(errorlog.logger);
 
 // Utilisation des routeurs
-app.use('/api/utilisateur',errorlog, utilisateurRoute);
-app.use('/api/tache',errorlog, tacheRoute);
-app.use('/api/soustache',errorlog, soustacheRoute);
+app.use('/api/utilisateur', utilisateurRoute);
+app.use('/api/tache', tacheRoute);
+app.use('/api/soustache', soustacheRoute);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
 
 app.listen(PORT, () => 
