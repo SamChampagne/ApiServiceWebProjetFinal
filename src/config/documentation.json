@@ -18,7 +18,7 @@
         }
     ],
     "paths" : {
-        "/api/tache/afficherall" : {
+        "/api/tache/afficherall/:statut?" : {
             "get": {
                 "description": "Retourne la liste de toutes les tâches. Par default, retourne seulement les tâches qui ne sont pas terminées",
                 "summary": "Liste des tâches",
@@ -34,7 +34,7 @@
                         }
                     },
                     {
-                        "name": "all",
+                        "name": "statut",
                         "in": "query",
                         "description": "Si oui ou non, afficher toutes les tâches",
                         "required": false,
@@ -268,8 +268,8 @@
                 }
             }
         },
-        "/api/tache/changer/:id/:status" : {
-            "delete": {
+        "/api/tache/changer/:id/:statut" : {
+            "put": {
                 "description": "Change le status d'une tâche",
                 "summary": "Changement de status de tâche",
                 "tags": [ "getTaches" ],
@@ -346,6 +346,87 @@
                 }
             }
         },
+        "/api/tache/modifier/:id": {
+            "put": {
+                "description": "Modifie une tâche dans la base de données",
+                "summary": "Modification de tâche",
+                "tags": ["getTaches"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tâche à modifier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "minimum": 0
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Clé API valide de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Nouvelles informations de la tâche",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/tache"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tâche modifiée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/tache"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Clé API invalide / manquante",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tâche non trouvée",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur lors de la modification de la tâche",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        
         "/api/utilisateur/ajouter": {
             "post": {
                 "description": "Ajoute un utilisateur à la base de données",
