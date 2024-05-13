@@ -267,9 +267,239 @@
                     }
                 }
             }
+        },
+        "/api/tache/changer/:id/:status" : {
+            "delete": {
+                "description": "Change le status d'une tâche",
+                "summary": "Liste des tâches",
+                "tags": [ "getTaches" ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Clé api, valide de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "id de la tache à supprimer",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "minimum": 0,
+                            "maximum": 1
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "status changer",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "minimum": 0,
+                            "maximum": 1
+                        }
+                    }
+                    
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Changement de tâche réussi pour l'ID ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/tache"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Clé Api invalide / manquante",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Echec lors du changement de tâche",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/utilisateur/ajouter": {
+            "post": {
+                "description": "Ajoute un utilisateur à la base de données",
+                "summary": "Ajout d'utilisateur",
+                "tags": ["utilisateur"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Informations de l'utilisateur à ajouter",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/utilisateur"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Clé API valide de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur ajouté avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/utilisateur"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Clé API invalide / manquante",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur lors de l'ajout de l'utilisateur",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/utilisateur/token": {
+            "put": {
+                "description": "Génère une nouvelle clé API pour l'utilisateur",
+                "summary": "Obtention de clé API",
+                "tags": ["utilisateur"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Informations de l'utilisateur (email et mot de passe)",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "format": "email"
+                                },
+                                "motdepasse": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Clé API générée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cle_api": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Email ou mot de passe incorrect",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur lors de la génération de la clé API",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
-    "components":{"schemas":{"tache" : {
+    "components":{"schemas":{
+        "utilisateur": {
+            "type": "object",
+            "required": [
+                "nom",
+                "prenom",
+                "email",
+                "motdepasse",
+                "cle_api"
+            ],
+            "properties": {
+                "nom": {
+                    "type": "string"
+                },
+                "prenom": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "motdepasse": {
+                    "type": "string"
+                },
+                "cle_api": {
+                    "type": "string"
+                }
+            }
+        },
+    "tache" : {
         "type": "object",
         "required": [
             "user_id",
