@@ -22,15 +22,19 @@ class Utilisateur {
         });
     }
     static async ajouterUsager(nom, prenom, email, motdepasse) {
-        
         const cleapi = uuidv4(); // Générer une clé API unique
         try {
             const query = `
                 INSERT INTO Usagers (nom, prenom, email, motdepasse, cle_api)
-                VALUES ( $1, $2, $3, $4, $5)
+                VALUES ($1, $2, $3, $4, $5)
                 RETURNING *;
             `;
-            const values = [ nom, prenom, email, motdepasse, cleapi];
+            const values = [nom, prenom, email, motdepasse, cleapi];
+    
+            // Ajouter des logs pour vérifier les valeurs et la requête SQL
+            console.log('Query:', query);
+            console.log('Values:', values);
+    
             // Assurez-vous d'avoir correctement configuré votre connexion à la base de données
             const result = await pool.query(query, values);
             const newUser = result.rows[0];
@@ -38,6 +42,8 @@ class Utilisateur {
             // Retourner le nouvel utilisateur créé
             return newUser;
         } catch (error) {
+            // Gérer les erreurs en les lançant pour une meilleure visibilité
+            console.error('Erreur lors de l\'ajout de l\'usager :', error);
             throw new Error(`Erreur lors de l'ajout de l'usager : ${error.message}`);
         }
     }
