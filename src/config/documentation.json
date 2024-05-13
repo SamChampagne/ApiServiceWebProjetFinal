@@ -149,7 +149,7 @@
             }
         },
         "/api/tache/ajouter" : {
-            "get": {
+            "post": {
                 "description": "Ajoute une tache dans la bd",
                 "summary": "Liste des tâches",
                 "tags": [ "getTaches" ],
@@ -167,7 +167,73 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Toutes les tâches, complétées ou pas.",
+                        "description": "La tache est ajouter avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/tache"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Clé Api invalide / manquante",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur d'obtention des données",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tache/supprimer/:id" : {
+            "delete": {
+                "description": "Supprime une tache de la bd",
+                "summary": "Liste des tâches",
+                "tags": [ "getTaches" ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Clé api, valide de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "id de la tache à supprimer",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "minimum": 0,
+                            "maximum": 1
+                        }
+                    }
+                    
+                ],
+                "responses": {
+                    "200": {
+                        "description": "La tache est supprimer avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
