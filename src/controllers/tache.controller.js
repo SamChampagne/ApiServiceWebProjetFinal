@@ -78,7 +78,7 @@ const supprimerTache = async (req, res, next) => {
 
         const supprimerTache = await Tache.supprimerTache(id);
         
-        res.status(200).json({ message: "Usager supprimer avec succès" + supprimerTache });
+        res.status(200).json({ message: "Tache supprimer avec succès" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ erreur: `Echec lors de la suppression de tache ${req.params.email}` });
