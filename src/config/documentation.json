@@ -86,7 +86,7 @@
         "/api/tache/afficher/:id" : {
             "get": {
                 "description": "Retourne la liste de toutes les tâches. Par default, retourne seulement les tâches qui ne sont pas terminées",
-                "summary": "Liste des tâches",
+                "summary": "Afficher une tâche spécifique",
                 "tags": [ "getTaches" ],
                 "parameters": [
                     {
@@ -151,7 +151,7 @@
         "/api/tache/ajouter" : {
             "post": {
                 "description": "Ajoute une tache dans la bd",
-                "summary": "Liste des tâches",
+                "summary": "Ajouter une tâche",
                 "tags": [ "getTaches" ],
                 "parameters": [
                     {
@@ -205,7 +205,7 @@
         "/api/tache/supprimer/:id" : {
             "delete": {
                 "description": "Supprime une tache de la bd",
-                "summary": "Liste des tâches",
+                "summary": "Supprimer une tâche",
                 "tags": [ "getTaches" ],
                 "parameters": [
                     {
@@ -271,7 +271,7 @@
         "/api/tache/changer/:id/:status" : {
             "delete": {
                 "description": "Change le status d'une tâche",
-                "summary": "Liste des tâches",
+                "summary": "Changement de status de tâche",
                 "tags": [ "getTaches" ],
                 "parameters": [
                     {
@@ -468,9 +468,307 @@
                     }
                 }
             }
+        },
+        "/api/soustache/modifier/:id": {
+            "put": {
+                "description": "Modifie une sous-tâche dans la base de données",
+                "summary": "Modification de sous-tâche",
+                "tags": ["soustache"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "ID de la sous-tâche à modifier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "minimum": 0
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Nouvelles informations de la sous-tâche",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/sousTache"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Clé API valide de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sous-tâche modifiée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/sousTache"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Clé API invalide / manquante",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sous-tâche non trouvée",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur lors de la modification de la sous-tâche",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/soustache/supprimer/:id": {
+            "delete": {
+                "description": "Supprime une sous-tâche de la base de données",
+                "summary": "Suppression de sous-tâche",
+                "tags": ["soustache"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la sous-tâche à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "minimum": 0
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Clé API valide de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sous-tâche supprimée avec succès"
+                    },
+                    "401": {
+                        "description": "Clé API invalide / manquante",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sous-tâche non trouvée",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur lors de la suppression de la sous-tâche",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/soustache/changer/:id/:statut": {
+            "put": {
+                "description": "Change le statut d'une sous-tâche dans la base de données",
+                "summary": "Changement de statut de sous-tâche",
+                "tags": ["soustache"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la sous-tâche à modifier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "minimum": 0
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "path",
+                        "description": "Nouveau statut de la sous-tâche (true pour complété, false pour non complété)",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Clé API valide de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Statut de la sous-tâche modifié avec succès"
+                    },
+                    "401": {
+                        "description": "Clé API invalide / manquante",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sous-tâche non trouvée",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur lors du changement de statut de la sous-tâche",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        
+        
+        "/api/soustache/ajouter": {
+            "post": {
+                "description": "Ajoute une sous-tâche à la base de données",
+                "summary": "Ajout de sous-tâche",
+                "tags": ["soustache"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Informations de la sous-tâche à ajouter",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/sousTache"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Clé API valide de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sous-tâche ajoutée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/sousTache"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Clé API invalide / manquante",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur lors de l'ajout de la sous-tâche",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components":{"schemas":{
+        "sousTache": {
+            "type": "object",
+            "required": [
+                "titre",
+                "complete",
+                "tache_id"
+            ],
+            "properties": {
+                "titre": {
+                    "type": "string"
+                },
+                "complete": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "tache_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "utilisateur": {
             "type": "object",
             "required": [
